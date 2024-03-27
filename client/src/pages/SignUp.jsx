@@ -75,7 +75,7 @@ const SignUp = () => {
                 loading ? (
                  <>
                    <Spinner size='sm'/>
-                  <span className="pl-3">Carrgando...</span>
+                  <span className="pl-3">Carregando...</span>
                  </>
                 ) : "Criar conta"
               }

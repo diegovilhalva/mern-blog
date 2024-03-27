@@ -55,7 +55,6 @@ export const signIn = async (req, res, next) => {
 
       res.status(200).cookie('access_token', token, {
          httpOnly: true,
-
       }).json(rest)
 
 
