@@ -1,10 +1,12 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Navbar, Button,TextInput } from "flowbite-react"
+import { Navbar, Button,TextInput, Dropdown, Avatar } from "flowbite-react"
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
-
+import {useSelector} from "react-redux"
 const Header = () => {
   const path = useLocation().pathname;
+  const {currentUser} = useSelector((state) => state.user)
+  
   return (
     <Navbar className='border-b-2'>
 
@@ -27,11 +29,26 @@ const Header = () => {
         <Button className='w-12 h-10 hidden sm:inline' color={"gray"} pill>
           <FaMoon/>
         </Button>
-        <Link to={"/sign-in"}>
-          <Button gradientDuoTone={"purpleToBlue"} outline>
-              Login
-          </Button>
-        </Link>
+        {currentUser ? (
+          <Dropdown arrowIcon={false} inline  label={<Avatar alt='user' img={currentUser.profilePicture} rounded/>}>
+              <Dropdown.Header>
+                <span className='block text-sm'>@{currentUser.username}</span>
+                <span className="block text-sm font-medium truncate">{currentUser.email}</span>
+                </Dropdown.Header>              
+                <Link to={'/dashboard?tab=profile'}>
+                  <Dropdown.Item>Perfil</Dropdown.Item>
+                </Link>
+                <Dropdown.Divider/>
+                <Dropdown.Item>Sair</Dropdown.Item>
+          </Dropdown>
+        ) : (
+              <Link to={"/sign-in"}>
+              <Button gradientDuoTone={"purpleToBlue"} outline>
+                  Login
+              </Button>
+            </Link>
+        ) }
+      
         <Navbar.Toggle/>
 
       </div>
