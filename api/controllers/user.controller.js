@@ -38,8 +38,8 @@ export const updateUser = async (req,res,next) => {
             return next(erroHandler(400,'Nome de usuário deve conter apenas letras e números'))
             
         }
-
-        try {
+    }
+            try {
             const updateUser = await User.findByIdAndUpdate(req.params.userId,{
                 $set:{
                     username:req.body.username,
@@ -53,6 +53,6 @@ export const updateUser = async (req,res,next) => {
         } catch (error) {
             console.log(error)
         }
-    }
+    
     
 }
