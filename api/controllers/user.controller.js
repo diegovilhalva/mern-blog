@@ -56,3 +56,15 @@ export const updateUser = async (req,res,next) => {
     
     
 }
+
+export const deleteUser = async (req,res,next) => {
+    if(req.user.id !== req.params.userId){
+        return next(erroHandler(403,"Você não possui autorização para acessar este recurso"))
+    }
+    try {
+        await User.findByIdAndDelete(req.params.userId)
+        res.status(200).json("Usuário deletado com sucesso")
+    } catch (error) {
+        next(error)
+    }
+}
