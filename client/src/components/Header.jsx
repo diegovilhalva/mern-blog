@@ -4,11 +4,30 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import {useSelector,useDispatch} from "react-redux"
 import { toggleTheme } from '../redux/theme/themeSlice';
+import { signoutSuccess } from '../redux/user/userSlice';
 const Header = () => {
   const path = useLocation().pathname;
   const {currentUser} = useSelector((state) => state.user)
-  const dispath = useDispatch()
+  const dispatch = useDispatch()
   const {theme} = useSelector((state) => state.theme)
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch('/api/user/signout',{
+        method:"POST"
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        console.log(data.message)
+      }else{
+        dispatch(signoutSuccess())
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+ }
   return (
     <Navbar className='border-b-2'>
 
@@ -29,7 +48,7 @@ const Header = () => {
       </Button>
       <div className='flex gap-2 md:order-2'>
         <Button className='w-12 h-10 hidden sm:inline' color={"gray"} pill 
-        onClick={() => dispath(toggleTheme())}>
+        onClick={() => dispatch(toggleTheme())}>
             {theme === 'light' ? <FaMoon/> : <FaSun/>}
         </Button>
         {currentUser ? (
@@ -42,7 +61,7 @@ const Header = () => {
                   <Dropdown.Item>Perfil</Dropdown.Item>
                 </Link>
                 <Dropdown.Divider/>
-                <Dropdown.Item>Sair</Dropdown.Item>
+                <Dropdown.Item onClick={handleSignOut}>Sair</Dropdown.Item>
           </Dropdown>
         ) : (
               <Link to={"/sign-in"}>

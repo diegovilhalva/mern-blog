@@ -10,7 +10,7 @@ import {
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { updateStart,updateFailure,updateSuccess,deleteUserSuccess,deleteUserFailure,deleteUserStart } from '../redux/user/userSlice';
+import { updateStart,updateFailure,updateSuccess,deleteUserSuccess,deleteUserFailure,deleteUserStart,signoutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
@@ -124,6 +124,8 @@ export default function DashProfile() {
   setShowModal(false)
 
   try {
+
+    dispatch(deleteUserStart())
     const res = await fetch(`/api/user/delete/${currentUser._id}`,{
       method:"DELETE",
     })
@@ -137,6 +139,24 @@ export default function DashProfile() {
   } catch (error) {
     dispatch(deleteUserFailure(error.message))
   }
+ }
+
+ const handleSignOut = async () => {
+    try {
+      const res = await fetch('/api/user/signout',{
+        method:"POST"
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        console.log(data.message)
+      }else{
+        dispatch(signoutSuccess())
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
  }
 
 
@@ -224,7 +244,7 @@ export default function DashProfile() {
         <span  className='cursor-pointer' onClick={() => setShowModal(true)}>
           Deletar conta
         </span>
-        <span className='cursor-pointer'>
+        <span className='cursor-pointer' onClick={handleSignOut}>
           Sair
         </span>
       </div>
