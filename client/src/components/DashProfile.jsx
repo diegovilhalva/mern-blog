@@ -234,10 +234,19 @@ export default function DashProfile() {
           type='submit'
           gradientDuoTone='purpleToBlue'
           outline
-        
+          disabled={loading || imageFileUploading}
         >
-        Atualizar
+        {loading ? 'Carregando...' : 'Atualizar' }
         </Button>
+        {
+          currentUser.isAdmin && (
+           <Link to={'/create-post'}>
+             <Button type='button' gradientDuoTone={'purpleToPink'} className='w-full'>
+              Criar Post
+            </Button>
+           </Link>
+          )
+        }
         
       </form>
       <div className='text-red-500 flex justify-between mt-5'>
