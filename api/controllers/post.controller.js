@@ -11,7 +11,11 @@ export const create = async (req,res,next) => {
         return next(erroHandler(400,"Por favor, preencha todos os campos"))
     }
 
-    const slug = req.body.title.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9]/g,'')
+    const slug = req.body.title
+    .split(' ')
+    .join('-')
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9-]/g, '');
 
     const newPost = new Post({
         ...req.body,
