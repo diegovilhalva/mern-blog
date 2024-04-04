@@ -1,22 +1,47 @@
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ReactQuill from "react-quill"
 import 'react-quill/dist/quill.snow.css'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage"
 import {app} from "../firebase"
 import {CircularProgressbar} from "react-circular-progressbar"
 import "react-circular-progressbar/dist/styles.css"
-import {useNavigate} from "react-router-dom"
+import {useNavigate,useParams} from "react-router-dom"
+import { useSelector } from "react-redux"
 
-
-const CreatePost = () => {
+const UpdatePost = () => {
 
     const [file,setFile] = useState(null)
     const [imageUploadProgress,setImageUploadProgress] = useState(null)
     const [imageUploadError,setImageUploadError] = useState(null)
     const [formData,setFormData] = useState({})
     const [publishError,setPublishError] = useState(null)
+   
     const navigate = useNavigate()
+    const {currentUser}  = useSelector((state) => state.user)
+    const  {postId} = useParams()
+    useEffect(() => {
+      const fetchPost = async () => {
+        try {
+            const res =  await fetch(`/api/post/getposts?postId=${postId}`)
+            const data = await res.json()
+            if (!res.ok) {
+                console.log(error)
+                setPublishError(data.message)
+                return
+            }
+
+            if (res.ok) {
+                setPublishError(null)
+                setFormData(data.posts[0])
+            }
+         } catch (error) {
+             console.log(error)
+         }
+      }
+      fetchPost()
+    },[postId])
+
     const handleUploadImage = async () => {
         try {
             if (!file) {
@@ -59,8 +84,8 @@ const CreatePost = () => {
     const handleSubmit =  async(e) => {
         e.preventDefault()
         try {
-            const res = await fetch('/api/post/create', {
-                method: 'POST',
+            const res = await fetch(`/api/post/updatepost/${postId}/${currentUser._id}`, {
+                method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
                 },
@@ -84,12 +109,12 @@ const CreatePost = () => {
  
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-        <h1 className="text-center text-3xl my-7 font-semibold">Criar post</h1>
+        <h1 className="text-center text-3xl my-7 font-semibold">Editar post</h1>
         <form  className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4 sm:flex-row justify-between">
                 <TextInput type='text' placeholder="Título" required  id="title" className="flex-1"
-                onClick={(e) => setFormData({...formData,title:e.target.value})}/>
-                <Select onChange={(e) => setFormData({...formData,category:e.target.value})}>
+                onClick={(e) => setFormData({...formData,title:e.target.value})} value={formData.title}/>
+                <Select onChange={(e) => setFormData({...formData,category:e.target.value})} value={formData.category}>
                     <option value="uncathegorized">Selecionar categoria</option>
                     <option value="javascript">JavaScript</option>
                     <option value="reactjs">React.js</option>
@@ -123,10 +148,10 @@ const CreatePost = () => {
                     <img src={formData.image} alt="upload" className="w-full h-72 object-cover" />
                 )
             }
-            <ReactQuill theme="snow"  placeholder="Escreva algo interessante"   className="h-72 mb-12" required    onChange={(value) => {
+            <ReactQuill theme="snow" value={formData.content}  placeholder="Escreva algo interessante"   className="h-72 mb-12" required    onChange={(value) => {
             setFormData({ ...formData, content: value })
          }} />
-            <Button type="submit" gradientDuoTone={'purpleToPink'}>Publicar</Button>
+            <Button type="submit" gradientDuoTone={'purpleToPink'}>Atualizar</Button>
             {
                 publishError && <Alert className="mt-5" color="failure">{publishError}</Alert>
             }
@@ -136,4 +161,4 @@ const CreatePost = () => {
   )
 }
 
-export default CreatePost
+export default UpdatePost

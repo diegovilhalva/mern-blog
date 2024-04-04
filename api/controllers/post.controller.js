@@ -92,3 +92,23 @@ export const deletePost = async (req,res,next) => {
   }
 
 }
+
+export const updatePost = async (req,res,next) => {
+  if(!req.user.isAdmin || req.user.id !== req.params.userId){
+    return next(erroHandler(403,"Você não possui autorização para deletar este post"))
+  }
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(req.params.postId,{
+    $set:{
+      title:req.body.title,
+      content:req.body.content,
+      category:req.body.category,
+      image:req.body.image
+    }},{new:true})
+
+    res.status(200).json(updatedPost)
+  } catch (error) {
+    next(error)
+  }
+}
