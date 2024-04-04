@@ -96,6 +96,8 @@ const CreatePost = () => {
                     <option value="nextjs">Next.js</option>
                     <option value="nodejs">Node.js</option>
                     <option value="webdevelopment">Desenvolvimento web</option>
+                    <option value="sql">Sql</option>
+                    <option value="vuejs">Vue.js</option>
                 </Select>
             </div>
 
