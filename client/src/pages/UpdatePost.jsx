@@ -112,8 +112,17 @@ const UpdatePost = () => {
         <h1 className="text-center text-3xl my-7 font-semibold">Editar post</h1>
         <form  className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4 sm:flex-row justify-between">
-                <TextInput type='text' placeholder="Título" required  id="title" className="flex-1"
-                onClick={(e) => setFormData({...formData,title:e.target.value})} value={formData.title}/>
+            <TextInput
+            type='text'
+            placeholder='Título'
+            required
+            id='title'
+            className='flex-1'
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
+            value={formData.title}
+          />
                 <Select onChange={(e) => setFormData({...formData,category:e.target.value})} value={formData.category}>
                     <option value="uncathegorized">Selecionar categoria</option>
                     <option value="javascript">JavaScript</option>
