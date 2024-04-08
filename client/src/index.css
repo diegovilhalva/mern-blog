@@ -39,7 +39,7 @@ body {
 
 .post-content pre {
     background-color: #23241f;
-    width: 600px;
+    width: 100%;
     color: #f8f8f2;
     max-width: 42rem;
     padding: 5px 10px;
