@@ -74,8 +74,29 @@ export const editComment = async (req,res,next) => {
         },{new:true})
         
         res.status(200).json(editedComment)
-        
+
     } catch (error) {
         next(error)
     }
+}
+
+export const deleteComment = async (req,res,next) => {
+    try {
+        const comment = await Comment.findById(req.params.commentId)
+        if(!comment){
+            return next(erroHandler(404,"Comentário não encontrado"))
+        }
+
+        if (comment.userId !== req.user.id && !req.user.isAdmin) {
+            return next(erroHandler(403,"Você não possui autorização para realizar esta requisição"))
+        }
+        
+        
+        await Comment.findByIdAndDelete(req.params.commentId)
+
+        res.status(200).json("Comentário deletado com sucesso!")
+
+    } catch (error) {
+        next(error)
+    }   
 }
