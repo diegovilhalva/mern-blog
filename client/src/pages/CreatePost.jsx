@@ -90,7 +90,7 @@ const CreatePost = () => {
                 <TextInput type='text' placeholder="Título" required  id="title" className="flex-1"
                 onClick={(e) => setFormData({...formData,title:e.target.value})}/>
                 <Select onChange={(e) => setFormData({...formData,category:e.target.value})}>
-                    <option value="uncathegorized">Selecionar categoria</option>
+                    <option value="uncategorized">Selecionar categoria</option>
                     <option value="javascript">JavaScript</option>
                     <option value="reactjs">React.js</option>
                     <option value="nextjs">Next.js</option>

@@ -16,7 +16,7 @@ const Home = () => {
   return (
     <div>
       <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto ">
-        <h1 className="text-3xl font-bold lg:text-6xl">Ola,mundo!</h1>
+        <h1 className="text-3xl font-bold lg:text-6xl">Ola Mundo!</h1>
         <p className="text-gray-500 text-xs sm:text-sm">          
             Aqui você encontrará uma variedade de artigos e tutoriais sobre temas como desenvolvimento web, engenharia de software e linguagens de programação
         </p>

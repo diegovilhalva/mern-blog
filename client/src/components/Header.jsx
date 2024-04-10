@@ -5,11 +5,25 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import {useSelector,useDispatch} from "react-redux"
 import { toggleTheme } from '../redux/theme/themeSlice';
 import { signoutSuccess } from '../redux/user/userSlice';
+import { useEffect, useState } from 'react';
 const Header = () => {
   const path = useLocation().pathname;
+  const location = useLocation()
+  const navigate = useNavigate()
   const {currentUser} = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const {theme} = useSelector((state) => state.theme)
+  const [searchTerm,setSearchTerm] = useState("")
+  useEffect(() => { 
+      const urLParams = new  URLSearchParams(location.search)
+
+      const searchTermFromUrl = urLParams.get('searchTerm')
+      if(searchTermFromUrl){
+        setSearchTerm(searchTermFromUrl)
+      }
+
+
+  },[location.search])
 
   const handleSignOut = async () => {
     try {
@@ -28,6 +42,16 @@ const Header = () => {
       console.log(error.message)
     }
  }
+
+ const handleSubmit =  (e) => {
+  e.preventDefault()
+
+  const urlParams = new URLSearchParams(location.search)
+
+    urlParams.set('searchTerm',searchTerm)
+    const searchQuery = urlParams.toString()
+    navigate(`/search?${searchQuery}`)
+ }
   return (
     <Navbar className='border-b-2'>
 
@@ -40,8 +64,8 @@ const Header = () => {
         </span>
         Blog
       </Link>
-      <form>
-        <TextInput placeholder='Pesquisar' type='text' rightIcon={AiOutlineSearch} className='hidden lg:inline'/>
+      <form onSubmit={handleSubmit}>
+        <TextInput placeholder='Pesquisar' type='text' rightIcon={AiOutlineSearch} className='hidden lg:inline' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
       </form>
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
         <AiOutlineSearch />
